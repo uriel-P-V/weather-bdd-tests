@@ -11,8 +11,15 @@ def step_given_api_available(context):
         "current_weather": "true"
     }
 
-    context.response = requests.get(API_BASE_URL, params=params)
+    context.api_available = requests.get(
+        API_BASE_URL,
+        params=params
+    )
 
+    assert context.api_available.status_code == 200, (
+        f"Weather API is unavailable. "
+        f"Status code: {context.api_available.status_code}"
+    )
 
 @when("I request the current weather for latitude {lat} and longitude {lon}")
 def step_when_request_weather(context, lat, lon):
