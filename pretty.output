@@ -1,0 +1,46 @@
+Feature: Current Weather API # features/weather.feature:1
+
+  Feature: Current Weather API  # features/weather.feature:1
+
+  @smoke
+  Scenario: Get current weather for valid coordinates                               # features/weather.feature:7
+    Given the weather API is available                                              # features/steps/weather_steps.py:6
+    When I request the current weather for latitude 20.6767 and longitude -103.3475 # features/steps/weather_steps.py:24
+    Then the response status code should be 200                                     # features/steps/weather_steps.py:35
+    And the response should contain weather data                                    # features/steps/weather_steps.py:43
+
+  @regression
+  Scenario: Validate mandatory fields in the response                               # features/weather.feature:13
+    Given the weather API is available                                              # features/steps/weather_steps.py:6
+    When I request the current weather for latitude 20.6767 and longitude -103.3475 # features/steps/weather_steps.py:24
+    Then the response should include "temperature" and "windspeed"                  # features/steps/weather_steps.py:53
+    And these fields should contain numeric values                                  # features/steps/weather_steps.py:62
+
+  @regression
+  Scenario: Request weather with invalid coordinates                                  # features/weather.feature:19
+    Given the weather API is available                                                # features/steps/weather_steps.py:6
+    When I request the current weather for latitude 999 and longitude 999             # features/steps/weather_steps.py:24
+    Then the response status code should be 400                                       # features/steps/weather_steps.py:35
+    And the response body should contain an "Latitude must be in range" error message # features/steps/weather_steps.py:77
+
+  @regression
+  Scenario Outline: Get current weather for different cities -- @1.1                # features/weather.feature:32
+    Given the weather API is available                                              # features/steps/weather_steps.py:6
+    When I request the current weather for latitude 20.6767 and longitude -103.3475 # features/steps/weather_steps.py:24
+    Then the response status code should be 200                                     # features/steps/weather_steps.py:35
+    And the response should contain weather data                                    # features/steps/weather_steps.py:43
+
+  @regression
+  Scenario Outline: Get current weather for different cities -- @1.2              # features/weather.feature:33
+    Given the weather API is available                                            # features/steps/weather_steps.py:6
+    When I request the current weather for latitude 51.5074 and longitude -0.1278 # features/steps/weather_steps.py:24
+    Then the response status code should be 200                                   # features/steps/weather_steps.py:35
+    And the response should contain weather data                                  # features/steps/weather_steps.py:43
+
+  @regression
+  Scenario Outline: Get current weather for different cities -- @1.3               # features/weather.feature:34
+    Given the weather API is available                                             # features/steps/weather_steps.py:6
+    When I request the current weather for latitude 35.6762 and longitude 139.6503 # features/steps/weather_steps.py:24
+    Then the response status code should be 200                                    # features/steps/weather_steps.py:35
+    And the response should contain weather data                                   # features/steps/weather_steps.py:43
+
